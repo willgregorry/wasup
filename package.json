@@ -2,9 +2,12 @@
   "name": "wasup",
   "version": "0.1.0",
   "private": true,
+  "main": "main.js",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "concurrently \"npm:next-dev\" \"npm:electron-dev\"",
+    "next-dev": "next dev",
+    "electron-dev": "wait-on http://localhost:3000 && electron .",
+    "build": "next build && electron-builder",
     "start": "next start",
     "lint": "eslint"
   },
@@ -16,8 +19,12 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "babel-plugin-react-compiler": "1.0.0",
+    "concurrently": "^9.2.1",
+    "electron": "^39.2.1",
+    "electron-builder": "^26.0.12",
     "eslint": "^9",
     "eslint-config-next": "16.0.3",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4",
+    "wait-on": "^9.0.3"
   }
 }
