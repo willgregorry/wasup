@@ -1,60 +1,53 @@
-
 'use client';
-
+import TypeBox from './Components/TypeBox';
 import { useState } from 'react';
 
 export default function Home() {
-  const [commandInput, setCommandInput] = useState('REGISTER:rafi:9090');
-  const [response, setResponse] = useState('Belum ada balasan...');
+  const [messages, setMessages] = useState([]);
 
-  const handleRunPython = async () => {
-    setResponse('Menjalankan skrip Python...');
-    
-    if (window.electronAPI) {
-      try {
-        const result = await window.electronAPI.runPython(commandInput);
-        setResponse(result); 
-      } catch (error) {
-        setResponse(`Error: ${error}`);
-      }
-    } else {
-      setResponse('Error: Fungsi Electron tidak ditemukan. Pastikan berjalan di Electron.');
-    }
-  };
-
-  const handleToggleDevTools = () => {
-    if (window.electronAPI) {
-      window.electronAPI.toggleDevTools();
+  const handleSendMessage = (message) => {
+    if (message.trim()) {
+      const newMessage = {
+        id: Date.now(),
+        text: message,
+        timestamp: new Date().toLocaleTimeString('id-ID', { 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        })
+      };
+      setMessages(prev => [...prev, newMessage]);
     }
   };
 
   return (
-    <main style={{ padding: '30px', fontFamily: 'sans-serif' }}>
-      <h1>Aplikasi Electron + Next.js</h1>
-      <p>Kirim perintah ke skrip Python-mu:</p>
+    
+    <div className="flex flex-col h-screen">
+      {/* Area Chat */}
       
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-        <input
-          type="text"
-          style={{ width: '300px', padding: '5px' }}
-          value={commandInput}
-          onChange={(e) => setCommandInput(e.target.value)}
-        />
-        <button onClick={handleRunPython}>
-          Kirim Perintah
-        </button>
+      <div className="flex-1 overflow-y-auto px-4 py-4 pb-24">
+        {messages.length === 0 ? (
+          <div className="flex items-center justify-center h-full text-gray-600">
+            <p>Coba aja Chat</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {messages.map((msg) => (
+              <div 
+                key={msg.id} 
+                className="bg-white rounded-lg px-4 py-3 shadow-md max-w-2xl"
+              >
+                <p className="text-black text-base">{msg.text}</p>
+                <span className="text-xs text-gray-500 mt-1 block">
+                  {msg.timestamp}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      <h3>Balasan dari Python:</h3>
-      <pre style={{ background: '#f0f0f0', padding: '15px', borderRadius: '5px' }}>
-        {response}
-      </pre>
-
-      <hr style={{ margin: '20px 0' }} />
-
-      <button onClick={handleToggleDevTools}>
-        Toggle Dev Tools (Inspect Element)
-      </button>
-    </main>
+      {/* TypeBox di bagian bawah */}
+      <TypeBox onSendMessage={handleSendMessage} />
+    </div>
   );
 }
