@@ -10,6 +10,7 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const DNS_SERVER_IP = '172.20.10.4';
+// const DNS_SERVER_IP = '127.0.0.1';
 const DNS_SERVER_PORT = 6000;
 const MY_PORT = 3000;
 
