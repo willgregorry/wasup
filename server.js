@@ -9,7 +9,7 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-const DNS_SERVER_IP = '172.20.10.4';
+const DNS_SERVER_IP = '192.168.0.139';
 const DNS_SERVER_PORT = 6000;
 const MY_PORT = 3000;
 
@@ -18,13 +18,24 @@ app.prepare().then(() => {
   const httpServer = http.createServer(server);
   
   const io = new Server(httpServer, {
-    cors: { origin: "*" }
+    cors: { 
+      origin: "*",
+      methods: ["GET", "POST"],
+      credentials: false
+    },
+    transports: ['websocket', 'polling']
   });
 
   io.on('connection', (socket) => {
     console.log('Ada peer lain terhubung ke saya:', socket.id);
+    
     socket.on('p2p-message', (data) => {
+      console.log(`Pesan dari ${data.from}: ${data.text}`);
       io.emit('incoming-message', data);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('❌ Seseorang disconnect:', socket.id);
     });
   });
 

@@ -132,7 +132,7 @@ export default function Home() {
         <div className='border-black border p-2 mb-5'>
           <h3>1. Register Domain</h3>
           <input className='border border-black' placeholder="myname.local" value={myDomain} onChange={e=>setMyDomain(e.target.value)} />
-          <button onClick={handleRegister}>Register to DNS</button>
+          <button onClick={handleRegister} className='px-4 ml-2 border-1 border-black'>Register to DNS</button>
         </div>
       ) : (
         <div style={{background: '#', padding: 10, marginBottom: 20}}>
@@ -143,7 +143,7 @@ export default function Home() {
       <div  className='border-black border p-2 mb-5'>
         <h3>2. Connect to Peer</h3>
         <input className='border border-black' placeholder="friend.local" value={targetDomain} onChange={e=>setTargetDomain(e.target.value)} />
-        <button onClick={connectToPeer} disabled={!registered}>Connect P2P</button>
+        <button onClick={connectToPeer} disabled={!registered} className='px-4 ml-2 border-1 border-black'>Connect P2P</button>
         <p>Status: <strong>{status}</strong></p>
       </div>
 
@@ -163,7 +163,7 @@ export default function Home() {
 
       <form onSubmit={sendMessage} style={{marginTop: 10, display: 'flex'}}>
         <input className='border border-black' style={{flex:1}} value={inputMsg} onChange={e=>setInputMsg(e.target.value)} placeholder="Type message..." disabled={!connectedPeer} />
-        <button disabled={!connectedPeer}>Send</button>
+        <button disabled={!connectedPeer} className='px-4 ml-2 border-1 border-black'>Send</button>
       </form>
     </div>
   );
